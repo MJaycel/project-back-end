@@ -1,0 +1,57 @@
+const express = require('express')
+const cors = require('cors')
+const jwt = require('jsonwebtoken')
+
+require('dotenv').config()
+require('./db')()
+
+const{ registerUser, loginUser  } = require('./controllers/user_controller')
+
+const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./controllers/event_controller')
+
+
+//get environment variable but if doesnt exist get 3000
+const port = process.env.PORT || 3000
+
+const app = express()
+app.use(cors())
+app.use(express.json())
+
+// verify Token
+app.use((req,res,next)=> {
+    if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] ==='Bearer'){
+        jwt.verify(req.headers.authorization.split(' ')[1], 'professional_project', (err,decode) => {
+            if(err)
+                req.user = undefined
+                req.user = decode
+
+            next()
+        })
+    } else{
+        req.user = undefined
+        next()
+    }
+})
+
+///////////////// ROUTES //////////////////////
+app.get('/', (req,res) => {
+    res.json('Hello World')
+}) 
+
+//////// USER ROUTES /////////
+app.post('/register', registerUser)
+app.post('/login', loginUser)
+
+/////// EVENT ROUTES ////////
+app.post('/calendar/add/event/:user_id', addEvent)
+app.get('/calendar/:user_id', getAllEvents)
+app.get('/calendar/event/:eventId', getEvent)
+app.post('/calendar/edit/event/:eventId', editEvent)
+app.delete('/calendar/delete/user/:user_id/event/:eventId', deleteEvent)
+
+
+
+
+app.listen(port, () => {
+    console.log(`http://localhost:${port}`)
+})
