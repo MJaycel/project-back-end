@@ -8,14 +8,13 @@ const User = require('../models/user_schema')
 const registerUser = (req, res) => {
     // let newUser = new User(req.body)
 
-    var value = 8
     let newUser = new User()
 
     newUser.name = req.body.name
     newUser.email = req.body.email
     newUser.password = req.body.password
 
-    if(newUser.password !== ''){
+    if(newUser.password.length >= 8){
         newUser.password = bcrypt.hashSync(req.body.password, 10)
     }
 
@@ -27,7 +26,17 @@ const registerUser = (req, res) => {
             })
         } else {
             // user.password = undefined
-            return res.json(user)
+                     //create token
+            res.json({
+                token: jwt.sign({
+                    name: user.name,
+                    email: user.email,
+                _id: user._id
+                }, 'professional_project'),
+                user
+            })
+            // return res.json(user)
+
         }
     })
 }
@@ -54,9 +63,10 @@ const loginUser = (req,res) => {
          })
 
      })
-        .catch(err => {
-            throw err
-        })
+    .catch(err => {
+        throw err
+        // return res.status(401).json()
+    })
 }
 
 module.exports = {

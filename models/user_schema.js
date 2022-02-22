@@ -23,12 +23,12 @@ const eventsSchema = new Schema({
         type: Boolean,
         default: false
     },
-    // startTime: {
-    //     type: Date
-    // },
-    // endTime: {
-    //     type: Date
-    // },
+    startTime: {
+        type: String
+    },
+    endTime: {
+        type: String
+    },
     repeat: {
         type: Boolean,
         default: false

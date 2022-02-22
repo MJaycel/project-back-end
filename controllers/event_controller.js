@@ -11,8 +11,8 @@ const addEvent = (req,res) => {
     event.description = req.body.description
     event.startDate = req.body.startDate
     event.endDate = req.body.endDate
-    // event.startTime = req.body.startTime
-    // event.endTime = req.body.endTime
+    event.startTime = req.body.startTime
+    event.endTime = req.body.endTime
     event.isComplete = req.body.isComplete
     event.user_id = req.params.user_id
 
@@ -111,6 +111,9 @@ const editEvent = (req,res) => {
         res.status(500).json(err)
     })
 }
+
+
+////// Weekly Event
 
 
 /////// Delete Event

@@ -13,12 +13,16 @@ const eventsSchema = new Schema({
     endDate:{
         type: Date,
     },
-    // startTime: {
-    //     type: Date
-    // },
-    // endTime: {
-    //     type: Date
-    // },
+    startTime: {
+        type: String
+    },
+    endTime: {
+        type: String
+    },
+    repeat: {
+        type: Boolean,
+        default: false
+    },
     isComplete: {
         type: Boolean,
         default: false
