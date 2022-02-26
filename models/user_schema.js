@@ -62,10 +62,9 @@ const todoListsSchema = new Schema({
     list_title: {
         type: String,
     },
-    date_created:{
-        type: Date,
-    },
     items: [ itemSchema ]
+},{
+    timestamps: true
 })
 
 const userSchema = new Schema({

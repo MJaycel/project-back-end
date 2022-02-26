@@ -9,6 +9,8 @@ const{ registerUser, loginUser  } = require('./controllers/user_controller')
 
 const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./controllers/event_controller')
 
+const{ addList, getAllToDo, getSingle, editList, deleteList, addItem } = require('./controllers/todo_controller')
+
 
 //get environment variable but if doesnt exist get 3000
 const port = process.env.PORT || 3000
@@ -48,6 +50,17 @@ app.get('/calendar/:user_id', getAllEvents)
 app.get('/calendar/event/:eventId', getEvent)
 app.post('/calendar/edit/event/:eventId', editEvent)
 app.delete('/calendar/delete/user/:user_id/event/:eventId', deleteEvent)
+
+/////// TO DO ROUTES //////////
+app.post('/todo/add/list/:user_id', addList) 
+app.get('/todo/:user_id', getAllToDo) 
+app.get('/todo/list/:listId', getSingle)
+app.post('/todo/edit/list/:listId', editList)
+app.delete('/todo/delete/user/:user_id/list/:listId', deleteList)
+
+app.post('/todo/add/user/:user_id/list/:listId', addItem) 
+
+
 
 
 
