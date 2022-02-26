@@ -9,7 +9,7 @@ const{ registerUser, loginUser  } = require('./controllers/user_controller')
 
 const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./controllers/event_controller')
 
-const{ addList, getAllToDo, getSingle, editList, deleteList, addItem } = require('./controllers/todo_controller')
+const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem } = require('./controllers/todo_controller')
 
 
 //get environment variable but if doesnt exist get 3000
@@ -59,6 +59,8 @@ app.post('/todo/edit/list/:listId', editList)
 app.delete('/todo/delete/user/:user_id/list/:listId', deleteList)
 
 app.post('/todo/add/user/:user_id/list/:listId', addItem) 
+app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId', editItem) 
+
 
 
 

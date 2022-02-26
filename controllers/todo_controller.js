@@ -131,6 +131,7 @@ const addItem = (req,res) => {
     ToDo.findByIdAndUpdate({'_id': listId}, {$push: {
         'items' : item
     }})
+
     .then((data) => {
         User.findOneAndUpdate(
             {_id: userId, "todoLists._id" : listId }, 
@@ -151,6 +152,60 @@ const addItem = (req,res) => {
     })
 }
 
+const editItem = (req,res) => {
+    var mongoose = require('mongoose')
+
+    var userId = mongoose.Types.ObjectId(req.params.user_id)
+    var listId = mongoose.Types.ObjectId(req.params.listId)
+    var itemId = mongoose.Types.ObjectId(req.params.itemId)
+
+    User.findByIdAndUpdate(
+        {_id: userId},
+        {$set: {
+            'todoLists.$[i].items.$[j].item_title': req.body.item_title,
+            'todoLists.$[i].items.$[j].item_note': req.body.item_note,
+            'todoLists.$[i].items.$[j].startDate': req.body.startDate,
+            'todoLists.$[i].items.$[j].endDate': req.body.endDate,
+            'todoLists.$[i].items.$[j].startTime': req.body.startTime,
+            'todoLists.$[i].items.$[j].endTime': req.body.endTime,
+            'todoLists.$[i].items.$[j].isComplete': req.body.isComplete,
+            'todoLists.$[i].items.$[j].priorityLevel': req.body.priorityLevel,
+            'todoLists.$[i].items.$[j].progress': req.body.progress
+            }
+        },
+        {
+            arrayFilters: [
+                { 'i._id' : listId},
+                {'j._id' : itemId}
+            ]
+        }
+    )
+    .then((data) => {
+        ToDo.findByIdAndUpdate(
+            {_id: listId},
+            {$set: {
+                'items.item_title' : req.body.item_title,
+                'items.item_note' : req.body.item_note,
+                'item.startDate' : req.body.startDate,
+                'item.endDate': req.body.endDate,
+                'item.startTime' : req.body.startTime,
+                'item.endTime' : req.body.endTime,
+                'item.isComplete' : req.body.isComplete,
+                'item.priorityLevel' : req.body.priorityLevel,
+                'item.progress' : req.body.progress
+            }}
+        )
+        if(data){
+            res.status(200).json(data)
+        }else{
+            res.status(404).json(`item not updated`)
+        }
+    }) .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })
+}
+
 module.exports = {
     addList,
     getAllToDo,
@@ -158,5 +213,6 @@ module.exports = {
     editList,
     deleteList,
 
-    addItem
+    addItem,
+    editItem
 }

@@ -7,15 +7,27 @@ const itemSchema = new Schema({
     item_note: {
         type: String
     },
-    start: {
+    startDate: {
         type: Date
     },
-    end: {
+    endDate: {
+        type: Date
+    },
+    startTime: {
+        type: Date
+    },
+    endTime: {
         type: Date
     },
     isComplete: {
         type: Boolean,
         default: false
+    },
+    priorityLevel: {
+        type: String,
+    },
+    progress: {
+        type: String
     }
 })
 
