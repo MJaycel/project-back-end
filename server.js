@@ -11,6 +11,8 @@ const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./co
 
 const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem } = require('./controllers/todo_controller')
 
+const { getAllVideos, getSingleVideo, addVideo, deleteVideo } = require('./controllers/youtube_controller.js')
+
 
 //get environment variable but if doesnt exist get 3000
 const port = process.env.PORT || 3000
@@ -61,6 +63,11 @@ app.delete('/todo/delete/user/:user_id/list/:listId', deleteList)
 app.post('/todo/add/user/:user_id/list/:listId', addItem) 
 app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId', editItem) 
 
+////-----Youtube Playlist-----////
+app.get('/youtube', getAllVideos)
+app.get('/youtube/:id', getSingleVideo)
+app.post('/youtube', addVideo)
+app.delete('/youtube/delete/:id', deleteVideo)
 
 
 
