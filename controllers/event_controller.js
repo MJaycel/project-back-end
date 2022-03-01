@@ -23,7 +23,7 @@ const addEvent = (req,res) => {
             if(users) {
                 users.events.push(event)
                 users.save()
-                res.status(201).json("Event created", data)            
+                res.status(201).json(data)            
             }
         })
     }).catch((err) => {

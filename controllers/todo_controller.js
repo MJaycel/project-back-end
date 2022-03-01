@@ -2,6 +2,7 @@ const { Mongoose } = require('mongoose')
 
 const User = require('../models/user_schema')
 const ToDo = require('../models/todo_schema')
+const { where } = require('../models/user_schema')
 
 const addList = (req,res) => {
     const list = new ToDo()
@@ -48,12 +49,25 @@ const getAllToDo = (req,res) => {
 const getSingle = (req,res) => {
     var mongoose = require('mongoose')
 
-    let id = mongoose.Types.ObjectId(req.params.listId);
+    let listId = mongoose.Types.ObjectId(req.params.listId);
+    let userId = mongoose.Types.ObjectId(req.params.userId);
 
-    ToDo.findById({'_id': id})
+
+    // ToDo.findById({'_id': id})
+    // .then((data) => {
+    //     if(data){
+    //         res.status(200).json(data)
+    //     } else {
+    //         res.status(404).json('List doesnt exist')
+    //     }
+    // }).catch((err) => {
+    //     console.error(err)
+    //     res.status(500).json(err)
+    // })
+    User.findOne({_id: userId}, {'todoLists': {$elemMatch: {'_id': listId}}})
     .then((data) => {
         if(data){
-            res.status(200).json(data)
+            res.status(200).json(data.todoLists)
         } else {
             res.status(404).json('List doesnt exist')
         }
@@ -128,18 +142,13 @@ const addItem = (req,res) => {
     var userId = req.params.user_id
     var listId = req.params.listId
 
-    ToDo.findByIdAndUpdate({'_id': listId}, {$push: {
-        'items' : item
-    }})
-
+    // ToDo.findByIdAndUpdate({'_id': listId}, {$push: {
+    //     'items' : item
+    // }})
+    User.findOneAndUpdate(
+        {_id: userId, "todoLists._id" : listId }, 
+        { $push: {'todoLists.$.items': item} })
     .then((data) => {
-        User.findOneAndUpdate(
-            {_id: userId, "todoLists._id" : listId }, 
-            { $push: {'todoLists.$.items': item} } , (err,user) => {
-                if(user){
-                    user.save()
-                }
-            })        
         if(data){
             res.status(200).json(data)
         } else {
@@ -181,20 +190,20 @@ const editItem = (req,res) => {
         }
     )
     .then((data) => {
-        ToDo.findByIdAndUpdate(
-            {_id: listId},
-            {$set: {
-                'items.item_title' : req.body.item_title,
-                'items.item_note' : req.body.item_note,
-                'item.startDate' : req.body.startDate,
-                'item.endDate': req.body.endDate,
-                'item.startTime' : req.body.startTime,
-                'item.endTime' : req.body.endTime,
-                'item.isComplete' : req.body.isComplete,
-                'item.priorityLevel' : req.body.priorityLevel,
-                'item.progress' : req.body.progress
-            }}
-        )
+        // ToDo.findByIdAndUpdate(
+        //     {_id: listId},
+        //     {$set: {
+        //         'items.item_title' : req.body.item_title,
+        //         'items.item_note' : req.body.item_note,
+        //         'items.startDate' : req.body.startDate,
+        //         'items.endDate': req.body.endDate,
+        //         'items.startTime' : req.body.startTime,
+        //         'items.endTime' : req.body.endTime,
+        //         'items.isComplete' : req.body.isComplete,
+        //         'items.priorityLevel' : req.body.priorityLevel,
+        //         'items.progress' : req.body.progress
+        //     }}
+        // )
         if(data){
             res.status(200).json(data)
         }else{
@@ -206,6 +215,43 @@ const editItem = (req,res) => {
     })
 }
 
+const getSingleItem = (req,res) => {
+    var mongoose = require('mongoose')
+
+    let listId = mongoose.Types.ObjectId(req.params.listId);
+    let userId = mongoose.Types.ObjectId(req.params.userId);
+    let itemId = mongoose.Types.ObjectId(req.params.itemId);
+
+
+    // User.find({_id: userId, todoLists: {_id: listId,items: {_id : itemId}}})
+    // .then((data) => {
+    //     if(data){
+    //         res.status(200).json(data)
+    //     } else {
+    //         res.status(404).json('item doesnt exist')
+    //     }
+    // }).catch((err) => {
+    //     console.error(err)
+    //     res.status(500).json(err)
+    // })
+    User.aggregate([
+        { $match: {_id: userId}},
+        {$unwind: '$todoLists'},
+        {$match: { 'todoLists._id': listId}},
+        {$unwind: '$todoLists.items'},
+        {$match: {'todoLists.items._id': itemId}}])
+    .then((data) => {
+            if(data){
+                res.status(200).json(data)
+            } else {
+                res.status(404).json('item doesnt exist')
+            }
+        }).catch((err) => {
+            console.error(err)
+            res.status(500).json(err)
+        })
+}
+
 module.exports = {
     addList,
     getAllToDo,
@@ -214,5 +260,6 @@ module.exports = {
     deleteList,
 
     addItem,
-    editItem
+    editItem,
+    getSingleItem
 }
