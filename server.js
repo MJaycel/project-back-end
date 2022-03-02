@@ -11,7 +11,9 @@ const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./co
 
 const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, getSingleItem } = require('./controllers/todo_controller')
 
+const {addCategory, getAllCat, addAudios, getAllAudios, getSingleAudio} = require('./controllers/audios_controller')
 
+const {addAudio, getAll, getAudio} = require('./controllers/medi_audios_controller')
 //get environment variable but if doesnt exist get 3000
 const port = process.env.PORT || 3000
 
@@ -63,6 +65,19 @@ app.delete('/todo/delete/user/:user_id/list/:listId', deleteList)
 app.post('/todo/add/user/:user_id/list/:listId', addItem) 
 app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId', editItem) 
 app.get('/todo/user/:userId/list/:listId/item/:itemId', getSingleItem)
+
+
+app.post('/category',addCategory)
+app.post('/songs', addAudios)
+app.get('/category', getAllCat)
+app.get('/songs', getAllAudios)
+app.get('/songs/:id', getSingleAudio)
+
+
+app.post('/meditation', addAudio)
+app.get('/meditation', getAll)
+app.get('/meditation/:id', getAudio)
+
 
 
 
