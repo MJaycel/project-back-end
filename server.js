@@ -14,6 +14,9 @@ const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, 
 const {addCategory, getAllCat, addAudios, getAllAudios, getSingleAudio} = require('./controllers/audios_controller')
 
 const {addAudio, getAll, getAudio} = require('./controllers/medi_audios_controller')
+
+const { getAllVideos, getSingleVideo, addVideo, deleteVideo } = require('./controllers/youtube_controller.js')
+
 //get environment variable but if doesnt exist get 3000
 const port = process.env.PORT || 3000
 
@@ -77,6 +80,12 @@ app.get('/songs/:id', getSingleAudio)
 app.post('/meditation', addAudio)
 app.get('/meditation', getAll)
 app.get('/meditation/:id', getAudio)
+
+////-----Youtube Playlist-----////
+app.get('/youtube/:user_id', getAllVideos)
+app.get('/youtube/:video_id', getSingleVideo)
+app.post('/youtube/add/:user_id', addVideo)
+app.delete('/youtube/delete/:id', deleteVideo)
 
 
 
