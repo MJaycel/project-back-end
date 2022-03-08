@@ -9,6 +9,7 @@ const addList = (req,res) => {
 
     list.list_title = req.body.list_title
     list.items = req.body.items
+    list.theme = req.body.theme
 
     list.save()
     .then((data) => {
@@ -85,10 +86,12 @@ const editList = (req,res) => {
 
     ToDo.findByIdAndUpdate({'_id' : id}, {$set: {
         'list_title': req.body.list_title,
+        'theme': req.body.theme
     }})
     .then((data) => {
         User.findOneAndUpdate({'todoLists._id': id}, {$set: {
             'todoLists.$.list_title': req.body.list_title,
+            'todoLists.$.theme': req.body.theme
         }}, (err, user) => {
             if(user) {
                 user.save()

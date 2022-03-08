@@ -71,6 +71,9 @@ const itemSchema = new Schema({
 })
 
 const todoListsSchema = new Schema({
+    theme: {
+        type: String
+    },
     list_title: {
         type: String,
     },
