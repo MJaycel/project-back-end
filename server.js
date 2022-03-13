@@ -9,7 +9,7 @@ const{ registerUser, loginUser  } = require('./controllers/user_controller')
 
 const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./controllers/event_controller')
 
-const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, getSingleItem } = require('./controllers/todo_controller')
+const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, getSingleItem, deleteItem } = require('./controllers/todo_controller')
 
 const {addCategory, getAllCat, addAudios, getAllAudios, getSingleAudio} = require('./controllers/audios_controller')
 
@@ -68,6 +68,8 @@ app.delete('/todo/delete/user/:user_id/list/:listId', deleteList)
 app.post('/todo/add/user/:user_id/list/:listId', addItem) 
 app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId', editItem) 
 app.get('/todo/user/:userId/list/:listId/item/:itemId', getSingleItem)
+app.delete('/todo/delete/user/:userId/list/:listId/item/:itemId', deleteItem)
+
 
 
 app.post('/category',addCategory)

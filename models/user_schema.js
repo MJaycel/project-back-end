@@ -62,16 +62,8 @@ const itemSchema = new Schema({
         type: String
     },
     startDate: {
-        type: Date
-    },
-    endDate: {
-        type: Date
-    },
-    startTime: {
-        type: Date
-    },
-    endTime: {
-        type: Date
+        type: Date,
+        default: null
     },
     isComplete: {
         type: Boolean,
@@ -79,9 +71,11 @@ const itemSchema = new Schema({
     },
     priorityLevel: {
         type: String,
+        default: 'Medium Priority'
     },
     progress: {
-        type: String
+        type: String,
+        default: 'Not Started'
     }
 })
 

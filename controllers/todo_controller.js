@@ -225,18 +225,6 @@ const getSingleItem = (req,res) => {
     let userId = mongoose.Types.ObjectId(req.params.userId);
     let itemId = mongoose.Types.ObjectId(req.params.itemId);
 
-
-    // User.find({_id: userId, todoLists: {_id: listId,items: {_id : itemId}}})
-    // .then((data) => {
-    //     if(data){
-    //         res.status(200).json(data)
-    //     } else {
-    //         res.status(404).json('item doesnt exist')
-    //     }
-    // }).catch((err) => {
-    //     console.error(err)
-    //     res.status(500).json(err)
-    // })
     User.aggregate([
         { $match: {_id: userId}},
         {$unwind: '$todoLists'},
@@ -255,6 +243,31 @@ const getSingleItem = (req,res) => {
         })
 }
 
+const deleteItem = (req,res) => {
+    var mongoose = require('mongoose') 
+
+    let userId = mongoose.Types.ObjectId(req.params.userId);
+    let listId = mongoose.Types.ObjectId(req.params.listId);
+    let itemId = mongoose.Types.ObjectId(req.params.itemId);
+
+
+    User.updateOne(
+            {'_id':userId, 'todoLists._id': listId},
+            { $pull : { "todoLists.$.items": {_id: itemId}}}
+        )
+    .then((data) => {
+        if(data){
+            res.status(200).json(data)
+        } else{
+            res.status(404).json('Item Not Deleted')
+        }
+    })        
+    .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })
+}
+
 module.exports = {
     addList,
     getAllToDo,
@@ -264,5 +277,6 @@ module.exports = {
 
     addItem,
     editItem,
-    getSingleItem
+    getSingleItem,
+    deleteItem
 }
