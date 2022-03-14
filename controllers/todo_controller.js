@@ -3,6 +3,9 @@ const { Mongoose } = require('mongoose')
 const User = require('../models/user_schema')
 const ToDo = require('../models/todo_schema')
 const { where } = require('../models/user_schema')
+const Event = require('../models/event_schema')
+const{ addEvent } = require('./event_controller')
+
 
 const addList = (req,res) => {
     const list = new ToDo()
@@ -174,9 +177,10 @@ const editItem = (req,res) => {
     User.findByIdAndUpdate(
         {_id: userId},
         {$set: {
-            'todoLists.$[i].items.$[j].item_title': req.body.item_title,
-            'todoLists.$[i].items.$[j].item_note': req.body.item_note,
+            'todoLists.$[i].items.$[j].title': req.body.title,
+            'todoLists.$[i].items.$[j].description': req.body.description,
             'todoLists.$[i].items.$[j].startDate': req.body.startDate,
+            'todoLists.$[i].items.$[j].inCalendar': req.body.inCalendar,
             'todoLists.$[i].items.$[j].endDate': req.body.endDate,
             'todoLists.$[i].items.$[j].startTime': req.body.startTime,
             'todoLists.$[i].items.$[j].endTime': req.body.endTime,
@@ -196,8 +200,8 @@ const editItem = (req,res) => {
         // ToDo.findByIdAndUpdate(
         //     {_id: listId},
         //     {$set: {
-        //         'items.item_title' : req.body.item_title,
-        //         'items.item_note' : req.body.item_note,
+        //         'items.title' : req.body.title,
+        //         'items.description' : req.body.description,
         //         'items.startDate' : req.body.startDate,
         //         'items.endDate': req.body.endDate,
         //         'items.startTime' : req.body.startTime,
@@ -207,6 +211,9 @@ const editItem = (req,res) => {
         //         'items.progress' : req.body.progress
         //     }}
         // )
+        // if(req.body.inCalendar === true){
+        //     addInCal(data)
+        // }
         if(data){
             res.status(200).json(data)
         }else{
@@ -267,6 +274,34 @@ const deleteItem = (req,res) => {
         res.status(500).json(err)
     })
 }
+
+// const addInCal = (data,res) => {
+//     // addEvent()
+//     const event = new Event()
+    
+//     event.title = data.todoLists.items.title
+//     event.description = data.todoLists.items.description
+//     event.startDate = data.todoLists.items.startDate
+//     event.isComplete = data.todoLists.items.title
+//     // event.user_id = data.todoLists.items.title
+//     // event.title = data.todoLists.items.title
+//     // event.title = data.todoLists.items.title
+//     // event.title = data.todoLists.items.title
+//     event.save()
+//     .then((data) => {
+//         User.findById(req.params.user_id, (err,users) => {
+
+//             if(users) {
+//                 users.events.push(event)
+//                 users.save()
+//                 res.status(201).json(data)            
+//             }
+//         })
+//     }).catch((err) => {
+//         console.error(err)
+//         res.status(500).json("Unsucccesful")
+//     })
+// }
 
 module.exports = {
     addList,

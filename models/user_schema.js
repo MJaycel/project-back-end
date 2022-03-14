@@ -55,15 +55,23 @@ const youtubeSchema = new Schema({
 
 
 const itemSchema = new Schema({
-    item_title: {
+    title: {
         type: String,
     },
-    item_note: {
+    description: {
         type: String
     },
     startDate: {
         type: Date,
         default: null
+    },
+    endDate: {
+        type: Date,
+        default: null
+    },
+    inCalendar: {
+        type: Boolean,
+        default: false
     },
     isComplete: {
         type: Boolean,
