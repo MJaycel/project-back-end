@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 require('./db')()
 
-const{ registerUser, loginUser  } = require('./controllers/user_controller')
+const{ registerUser, loginUser, getSingleUser  } = require('./controllers/user_controller')
 
 const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./controllers/event_controller')
 
@@ -48,6 +48,7 @@ app.get('/', (req,res) => {
 //////// USER ROUTES /////////
 app.post('/register', registerUser)
 app.post('/login', loginUser)
+app.get('/user/:id',getSingleUser)
 
 /////// EVENT ROUTES ////////
 app.post('/calendar/add/event/:user_id', addEvent)

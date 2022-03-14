@@ -69,8 +69,24 @@ const loginUser = (req,res) => {
     })
 }
 
+const getSingleUser = (req,res) => {
+    User.findById(req.params.id)
+        .then((data)=> {
+            if(data){
+                res.status(200).json(data)
+            }else{
+                res.status(404).json(`User with id: ${req.params.id} is not found`)
+            }
+        })
+        .catch((err)=> {
+            console.error(err)
+            res.status(500).json(err)
+        })
+}
+
+
 module.exports = {
     registerUser,
     loginUser,
-
+    getSingleUser
 }
