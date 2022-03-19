@@ -186,7 +186,8 @@ const editItem = (req,res) => {
             'todoLists.$[i].items.$[j].endTime': req.body.endTime,
             'todoLists.$[i].items.$[j].isComplete': req.body.isComplete,
             'todoLists.$[i].items.$[j].priorityLevel': req.body.priorityLevel,
-            'todoLists.$[i].items.$[j].progress': req.body.progress
+            'todoLists.$[i].items.$[j].progress': req.body.progress,
+            'todoLists.$[i].items.$[j].classes': req.body.classes
             }
         },
         {

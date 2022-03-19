@@ -32,6 +32,12 @@ const eventsSchema = new Schema({
     repeat: {
         type: Boolean,
         default: false
+    },
+    classes: {
+        type: String
+    },
+    item_id :{
+        type: String
     }
     // user_id: {
     //     type: Schema.Types.ObjectId
@@ -69,6 +75,9 @@ const itemSchema = new Schema({
         type: Date,
         default: null
     },
+    classes: {
+        type: String
+    },
     inCalendar: {
         type: Boolean,
         default: false
@@ -85,6 +94,7 @@ const itemSchema = new Schema({
         type: String,
         default: 'Not Started'
     }
+
 })
 
 const todoListsSchema = new Schema({

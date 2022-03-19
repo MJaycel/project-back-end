@@ -19,6 +19,9 @@ const eventsSchema = new Schema({
     endTime: {
         type: String
     },
+    classes: {
+        type: String
+    },
     repeat: {
         type: Boolean,
         default: false
@@ -29,6 +32,9 @@ const eventsSchema = new Schema({
     },
     user_id: {
         type: Schema.Types.ObjectId
+    },
+    item_id: {
+        type: String
     }
 })
 

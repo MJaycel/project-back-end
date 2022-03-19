@@ -12,9 +12,11 @@ const addEvent = (req,res) => {
     event.startDate = req.body.startDate
     event.endDate = req.body.endDate
     event.startTime = req.body.startTime
+    event.classes = req.body.classes
     event.endTime = req.body.endTime
     event.isComplete = req.body.isComplete
     event.user_id = req.params.user_id
+    event.item_id = req.body.item_id
 
     event.save()
     .then((data) => {
@@ -88,7 +90,9 @@ const editEvent = (req,res) => {
         'endDate': req.body.endDate,
         'startTime' : req.body.startTime,
         'endTime': req.body.endTime,
-        'isComplete': req.body.isComplete
+        'isComplete': req.body.isComplete,
+        'classes': req.body.classes,
+        'item_id' : req.body.item_id
     }})
     .then((data) => {
         User.findOneAndUpdate({'events._id': id}, {$set: {
@@ -98,7 +102,9 @@ const editEvent = (req,res) => {
             'events.$.endDate': req.body.endDate,
             'events.$.startTime' : req.body.startTime,
             'events.$.endTime': req.body.endTime,
-            'events.$.isComplete': req.body.isComplete           
+            'events.$.isComplete': req.body.isComplete,
+            'events.$.classes' : req.body.classes,
+            'events.$.item_id' : req.body.item_id           
         }}, (err, user) => {
             if(user){
                 user.save()
