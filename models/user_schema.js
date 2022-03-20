@@ -33,10 +33,16 @@ const eventsSchema = new Schema({
         type: Boolean,
         default: false
     },
+    recurrence_pattern: {
+        type: String
+    },
     classes: {
         type: String
     },
     item_id :{
+        type: String
+    },
+    recurring_id: {
         type: String
     }
     // user_id: {

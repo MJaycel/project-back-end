@@ -15,8 +15,11 @@ const addEvent = (req,res) => {
     event.classes = req.body.classes
     event.endTime = req.body.endTime
     event.isComplete = req.body.isComplete
+    event.repeat = req.body.repeat
+    event.recurrence_pattern = req.body.recurrence_pattern
     event.user_id = req.params.user_id
     event.item_id = req.body.item_id
+    event.recurring_id = req.body.recurring_id
 
     event.save()
     .then((data) => {
@@ -92,7 +95,11 @@ const editEvent = (req,res) => {
         'endTime': req.body.endTime,
         'isComplete': req.body.isComplete,
         'classes': req.body.classes,
-        'item_id' : req.body.item_id
+        'item_id' : req.body.item_id,
+        'repeat' : req.body.repeat,
+        'recurrence_pattern': req.body.recurrence_pattern,
+        'recurring_id' : req.body.recurring_id
+
     }})
     .then((data) => {
         User.findOneAndUpdate({'events._id': id}, {$set: {
@@ -104,7 +111,10 @@ const editEvent = (req,res) => {
             'events.$.endTime': req.body.endTime,
             'events.$.isComplete': req.body.isComplete,
             'events.$.classes' : req.body.classes,
-            'events.$.item_id' : req.body.item_id           
+            'events.$.item_id' : req.body.item_id,      
+            'events.$repeat' : req.body.repeat,
+            'events.$.recurrence_pattern' : req.body.recurrence_pattern,
+            'events.$.recurring_id' : req.body.recurring_id
         }}, (err, user) => {
             if(user){
                 user.save()
@@ -157,10 +167,46 @@ const deleteEvent = (req,res) => {
     })
 }
 
+const deleteManyEvent = (req,res) => {
+    var mongoose = require('mongoose') 
+
+    let userId = mongoose.Types.ObjectId(req.params.user_id);
+
+    // let id = mongoose.Types.ObjectId(req.params.eventId);
+
+    let rId = req.params.rId;
+
+    User.updateMany(
+        {'_id':userId},
+        { $pull : { events: {recurring_id: rId}}}
+    )    
+    .then((data) => {
+        Event.deleteMany({'recurring_id': rId}, (err) => {
+            if(err){
+                res.status(404).json('Events Not Deleted from events table')
+            } else{
+                res.status(200).json(data)
+            }
+        })
+        // if(data){
+        //     res.status(200).json("EVENT DELETED")
+        // } else {
+        //     res.status(404).json(`Event not deleted`)
+        // }            
+
+    })        
+    .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })
+
+}
+
 module.exports = {
     addEvent,
     getAllEvents,
     getEvent,
     editEvent,
-    deleteEvent
+    deleteEvent,
+    deleteManyEvent
 }

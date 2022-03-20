@@ -7,7 +7,7 @@ require('./db')()
 
 const{ registerUser, loginUser, getSingleUser  } = require('./controllers/user_controller')
 
-const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent } = require('./controllers/event_controller')
+const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent,deleteManyEvent } = require('./controllers/event_controller')
 
 const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, getSingleItem, deleteItem } = require('./controllers/todo_controller')
 
@@ -56,6 +56,9 @@ app.get('/calendar/:user_id', getAllEvents)
 app.get('/calendar/event/:eventId', getEvent)
 app.post('/calendar/edit/event/:eventId', editEvent)
 app.delete('/calendar/delete/user/:user_id/event/:eventId', deleteEvent)
+app.delete('/calendar/delete/many/user/:user_id/event/:rId', deleteManyEvent)
+
+
 
 /////// TO DO ROUTES //////////
 app.post('/todo/add/list/:user_id', addList) 

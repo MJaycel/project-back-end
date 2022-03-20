@@ -26,6 +26,9 @@ const eventsSchema = new Schema({
         type: Boolean,
         default: false
     },
+    recurrence_pattern: {
+        type: String
+    },
     isComplete: {
         type: Boolean,
         default: false
@@ -34,6 +37,9 @@ const eventsSchema = new Schema({
         type: Schema.Types.ObjectId
     },
     item_id: {
+        type: String
+    },
+    recurring_id: {
         type: String
     }
 })
