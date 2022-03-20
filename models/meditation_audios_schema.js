@@ -13,7 +13,7 @@ const mediAudioSchema = new Schema({
     cover_image: {
         type: String
     },
-    path: {
+    html_link: {
         type: String
     }
 })
