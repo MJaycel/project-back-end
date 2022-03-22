@@ -58,7 +58,7 @@ const addAudios = (req,res) => {
     audio.duration = req.body.duration
     audio.category = req.body.category
     audio.cover_image = req.body.cover_image
-    audio.path = req.body.path
+    audio.html_link = req.body.html_link
 
     // let id = mongoose.Types.ObjectId(req.body.category);
     // Audio.create(audio)
