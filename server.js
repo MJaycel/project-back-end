@@ -9,7 +9,7 @@ const{ registerUser, loginUser, getSingleUser  } = require('./controllers/user_c
 
 const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent,deleteManyEvent } = require('./controllers/event_controller')
 
-const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, getSingleItem, deleteItem } = require('./controllers/todo_controller')
+const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, getSingleItem, deleteItem, archiveItem, addSubTask, editSubTask, deleteSubTask } = require('./controllers/todo_controller')
 
 const {addCategory, getAllCat, addAudios, getAllAudios, getSingleAudio} = require('./controllers/audios_controller')
 
@@ -73,6 +73,12 @@ app.post('/todo/add/user/:user_id/list/:listId', addItem)
 app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId', editItem) 
 app.get('/todo/user/:userId/list/:listId/item/:itemId', getSingleItem)
 app.delete('/todo/delete/user/:userId/list/:listId/item/:itemId', deleteItem)
+app.post('/todo/archive/user/:user_id/list/:listId/item/:itemId', archiveItem) 
+app.post('/todo/add/user/:user_id/list/:listId/item/:itemId', addSubTask)
+app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId/subTask/:subTaskId', editSubTask) 
+app.delete('/todo/delete/user/:userId/list/:listId/item/:itemId/subTask/:subTaskId', deleteSubTask)
+
+
 
 
 

@@ -64,7 +64,7 @@ const registerUser = (req, res) => {
                 user
             })
             
-            var list = {list_title: "My Tasks", theme: "green"}
+            var list = {list_title: "To Do", theme: "green"}
             user.todoLists.push(list)
             user.save()
 

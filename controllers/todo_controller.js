@@ -87,19 +87,16 @@ const editList = (req,res) => {
 
     let id = mongoose.Types.ObjectId(req.params.listId);
 
-    ToDo.findByIdAndUpdate({'_id' : id}, {$set: {
-        'list_title': req.body.list_title,
-        'theme': req.body.theme
+    // ToDo.findByIdAndUpdate({'_id' : id}, {$set: {
+    //     'list_title': req.body.list_title,
+    //     'theme': req.body.theme
+    // }})
+    User.findOneAndUpdate({'todoLists._id': id}, {$set: {
+        'todoLists.$.list_title': req.body.list_title,
+        'todoLists.$.theme': req.body.theme
     }})
     .then((data) => {
-        User.findOneAndUpdate({'todoLists._id': id}, {$set: {
-            'todoLists.$.list_title': req.body.list_title,
-            'todoLists.$.theme': req.body.theme
-        }}, (err, user) => {
-            if(user) {
-                user.save()
-            }
-        } )
+
         if(data){
             res.status(200).json(data)
         } else {
@@ -187,7 +184,8 @@ const editItem = (req,res) => {
             'todoLists.$[i].items.$[j].isComplete': req.body.isComplete,
             'todoLists.$[i].items.$[j].priorityLevel': req.body.priorityLevel,
             'todoLists.$[i].items.$[j].progress': req.body.progress,
-            'todoLists.$[i].items.$[j].classes': req.body.classes
+            'todoLists.$[i].items.$[j].classes': req.body.classes,
+            'todoLists.$[i].items.$[j].archived': req.body.archived,
             }
         },
         {
@@ -276,34 +274,144 @@ const deleteItem = (req,res) => {
     })
 }
 
-// const addInCal = (data,res) => {
-//     // addEvent()
-//     const event = new Event()
-    
-//     event.title = data.todoLists.items.title
-//     event.description = data.todoLists.items.description
-//     event.startDate = data.todoLists.items.startDate
-//     event.isComplete = data.todoLists.items.title
-//     // event.user_id = data.todoLists.items.title
-//     // event.title = data.todoLists.items.title
-//     // event.title = data.todoLists.items.title
-//     // event.title = data.todoLists.items.title
-//     event.save()
-//     .then((data) => {
-//         User.findById(req.params.user_id, (err,users) => {
+const archiveItem = (req,res) => {
+    var mongoose = require('mongoose')
 
-//             if(users) {
-//                 users.events.push(event)
-//                 users.save()
-//                 res.status(201).json(data)            
-//             }
-//         })
-//     }).catch((err) => {
-//         console.error(err)
-//         res.status(500).json("Unsucccesful")
-//     })
-// }
+    var userId = mongoose.Types.ObjectId(req.params.user_id)
+    var listId = mongoose.Types.ObjectId(req.params.listId)
+    var itemId = mongoose.Types.ObjectId(req.params.itemId)
 
+    User.findByIdAndUpdate(
+        {_id: userId},
+        {$set: {
+            'todoLists.$[i].items.$[j].archived': req.body.archived,
+            }
+        },
+        {
+            arrayFilters: [
+                { 'i._id' : listId},
+                {'j._id' : itemId}
+            ]
+        }
+    )
+    .then((data) => {
+        if(data){
+            res.status(200).json(data)
+        }else{
+            res.status(404).json(`item not updated`)
+        }
+    }) .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })
+}
+
+const addSubTask = (req,res) => {
+    let subTask = req.body
+
+    var userId = req.params.user_id
+    var listId = req.params.listId
+    var itemId = req.params.itemId
+
+    User.findOneAndUpdate(
+        {_id: userId, "todoLists._id" : listId }, 
+        { $push:
+            {
+                'todoLists.$.items.$[j].subTask': subTask
+            } 
+        },
+        {
+            arrayFilters: [
+                {'j._id' : itemId}
+            ]
+        }
+    )
+    .then((data) => {
+        if(data){
+            res.status(200).json(data)
+        } else {
+            res.status(404).json(`SubTask not added`)
+        }
+    })        
+    .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })  
+}
+
+const editSubTask = (req,res) => {
+    var mongoose = require('mongoose')
+
+    var userId = mongoose.Types.ObjectId(req.params.user_id)
+    var listId = mongoose.Types.ObjectId(req.params.listId)
+    var itemId = mongoose.Types.ObjectId(req.params.itemId)
+    var subTaskId = mongoose.Types.ObjectId(req.params.subTaskId)
+
+    User.findByIdAndUpdate(
+        {_id: userId},
+        {$set: {
+            'todoLists.$[i].items.$[j].subTask.$[k].title': req.body.title,
+            'todoLists.$[i].items.$[j].subTask.$[k].startDate': req.body.startDate,
+            'todoLists.$[i].items.$[j].subTask.$[k].inCalendar': req.body.inCalendar,
+            'todoLists.$[i].items.$[j].subTask.$[k].isComplete': req.body.isComplete,
+            'todoLists.$[i].items.$[j].subTask.$[k].classes': req.body.classes,
+            }
+        },
+        {
+            arrayFilters: [
+                { 'i._id' : listId},
+                {'j._id' : itemId},
+                {'k._id': subTaskId}
+            ]
+        }
+    )
+    .then((data) => {
+        if(data){
+            res.status(200).json(data)
+        }else{
+            res.status(404).json(`item not updated`)
+        }
+    }) .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })    
+}
+
+const deleteSubTask = (req,res) => {
+    var mongoose = require('mongoose') 
+
+    let userId = mongoose.Types.ObjectId(req.params.userId);
+    let listId = mongoose.Types.ObjectId(req.params.listId);
+    let itemId = mongoose.Types.ObjectId(req.params.itemId);
+    let subTaskId = mongoose.Types.ObjectId(req.params.subTaskId)
+
+
+    User.updateOne(
+            {'_id':userId},
+            { $pull : { 
+                "todoLists.$[j].items.$[k].subTask": {_id: subTaskId}
+                }
+            },
+            {
+                arrayFilters: [
+                    {'j._id' : listId},
+                    {'k._id': itemId}
+                ]
+            }
+        )
+    .then((data) => {
+        if(data){
+            res.status(200).json(data)
+        } else{
+            res.status(404).json('SubTask Not Deleted')
+        }
+    })        
+    .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })
+}
+ 
 module.exports = {
     addList,
     getAllToDo,
@@ -314,5 +422,10 @@ module.exports = {
     addItem,
     editItem,
     getSingleItem,
-    deleteItem
+    deleteItem,
+    archiveItem,
+
+    addSubTask,
+    editSubTask,
+    deleteSubTask
 }

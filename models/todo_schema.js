@@ -28,6 +28,10 @@ const itemSchema = new Schema({
     },
     progress: {
         type: String
+    },
+    archived: {
+        type: Boolean,
+        default: false
     }
 })
 

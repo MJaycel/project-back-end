@@ -65,6 +65,27 @@ const youtubeSchema = new Schema({
     // }
 })
 
+const subTaskSchema = new Schema({
+    title: {
+        type: String,
+    },
+    startDate: {
+        type: Date,
+        default: null
+    },
+    classes: {
+        type: String
+    },
+    inCalendar: {
+        type: Boolean,
+        default: false
+    },
+    isComplete: {
+        type: Boolean,
+        default: false
+    }
+})
+
 
 const itemSchema = new Schema({
     title: {
@@ -76,6 +97,9 @@ const itemSchema = new Schema({
     startDate: {
         type: Date,
         default: null
+    },
+    startTime: {
+        type: String
     },
     endDate: {
         type: Date,
@@ -99,8 +123,12 @@ const itemSchema = new Schema({
     progress: {
         type: String,
         default: 'Not Started'
-    }
-
+    },
+    archived: {
+        type: Boolean,
+        default: false
+    },
+    subTask: [ subTaskSchema ]
 })
 
 const todoListsSchema = new Schema({
