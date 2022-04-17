@@ -44,6 +44,13 @@ const eventsSchema = new Schema({
     },
     recurring_id: {
         type: String
+    },
+    isAllDay: {
+        type: Boolean,
+        default: false
+    },
+    occurs_until: {
+        type: Date
     }
     // user_id: {
     //     type: Schema.Types.ObjectId
@@ -137,6 +144,10 @@ const todoListsSchema = new Schema({
     },
     list_title: {
         type: String,
+    },
+    archived: {
+        type: Boolean,
+        default: false
     },
     items: [ itemSchema ]
 },{

@@ -137,6 +137,29 @@ const deleteList = (req,res) => {
     })
 }
 
+///// Archive List
+const archiveList = (req,res) => {
+    var mongoose = require('mongoose')
+
+    let id = mongoose.Types.ObjectId(req.params.listId);
+
+    User.findOneAndUpdate({'todoLists._id': id}, {$set: {
+        'todoLists.$.archived': req.body.archived,
+    }})
+    .then((data) => {
+
+        if(data){
+            res.status(200).json(data)
+        } else {
+            res.status(404).json(`List not archived`)
+        }
+    })        
+    .catch((err) => {
+        console.error(err)
+        res.status(500).json(err)
+    })
+}
+
 ////// Add item in list
 const addItem = (req,res) => {
 
@@ -418,6 +441,7 @@ module.exports = {
     getSingle,
     editList,
     deleteList,
+    archiveList,
 
     addItem,
     editItem,

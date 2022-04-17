@@ -5,11 +5,11 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 require('./db')()
 
-const{ registerUser, loginUser, getSingleUser  } = require('./controllers/user_controller')
+const{ registerUser, loginUser, getSingleUser, editUser, getAllUsers  } = require('./controllers/user_controller')
 
-const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent,deleteManyEvent } = require('./controllers/event_controller')
+const{ addEvent, getAllEvents, getEvent,editEvent, deleteEvent,deleteManyEvent, UpdateManyEvent } = require('./controllers/event_controller')
 
-const{ addList, getAllToDo, getSingle, editList, deleteList, addItem, editItem, getSingleItem, deleteItem, archiveItem, addSubTask, editSubTask, deleteSubTask } = require('./controllers/todo_controller')
+const{ addList, getAllToDo, getSingle, editList, deleteList,archiveList ,addItem, editItem, getSingleItem, deleteItem, archiveItem, addSubTask, editSubTask, deleteSubTask } = require('./controllers/todo_controller')
 
 const {addCategory, getAllCat, addAudios, getAllAudios, getSingleAudio} = require('./controllers/audios_controller')
 
@@ -49,18 +49,24 @@ app.get('/', (req,res) => {
 app.post('/register', registerUser)
 app.post('/login', loginUser)
 app.get('/user/:id',getSingleUser)
+app.post('/edit/user/:id',editUser)
+app.get('/users',getAllUsers)
+
+
 
 /////// EVENT ROUTES ////////
-app.post('/calendar/add/event/:user_id', addEvent)
+app.post('/calendar/add/event/:userId', addEvent)
 app.get('/calendar/:user_id', getAllEvents)
-app.get('/calendar/event/:eventId', getEvent)
+// app.get('/calendar/event/:eventId', getEvent)
+app.get('/calendar/user/:userId/event/:eventId', getEvent)
+
 app.post('/calendar/edit/event/:eventId', editEvent)
 app.delete('/calendar/delete/user/:user_id/event/:eventId', deleteEvent)
 app.delete('/calendar/delete/many/user/:user_id/event/:rId', deleteManyEvent)
+app.post('/calendar/edit/many/event/:rId', UpdateManyEvent)
 
 
 
-/////// TO DO ROUTES //////////
 app.post('/todo/add/list/:user_id', addList) 
 app.get('/todo/:user_id', getAllToDo) 
 // app.get('/todo/list/:listId', getSingle)
@@ -68,6 +74,7 @@ app.get('/todo/user/:userId/list/:listId', getSingle)
 
 app.post('/todo/edit/list/:listId', editList)
 app.delete('/todo/delete/user/:user_id/list/:listId', deleteList)
+app.post('/todo/archive/list/:listId', archiveList)
 
 app.post('/todo/add/user/:user_id/list/:listId', addItem) 
 app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId', editItem) 

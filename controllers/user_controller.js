@@ -33,12 +33,11 @@ const addList = (req,res) => {
 
 //// Register User  
 const registerUser = (req, res) => {
-    // let newUser = new User(req.body)
 
     let newUser = new User()
 
     newUser.name = req.body.name
-    newUser.email = req.body.email
+    newUser.email =  req.body.email
     newUser.password = req.body.password
 
     if(newUser.password.length >= 8){
@@ -116,8 +115,56 @@ const getSingleUser = (req,res) => {
 }
 
 
+const editUser = (req,res) => {
+
+    let pass = req.body.password   
+    
+    if(pass.length >= 8){
+        pass = bcrypt.hashSync(req.body.password, 10)
+    }
+    
+    User.findByIdAndUpdate(
+        {
+            _id: req.params.id
+        }, 
+        { 
+            $set: {
+                'name': req.body.name,
+                'email': req.body.email,
+                'password': pass
+            }
+        })
+        .then((data) => {
+            res.status(200).json(data)
+        })
+        
+        .catch((err) => {
+            console.error(err)
+            res.status(500).json(err)
+        })
+
+}
+
+const getAllUsers = (req,res) => {
+    User.find()
+    .then((data) => {
+        if(data){
+            res.status(200).json(data)
+        }
+        else {
+            res.status(404).json("None found")
+        }
+    })
+    .catch((err)=> {
+        console.error(err)
+        res.status(500).json("None Found")
+    })
+}
+
 module.exports = {
     registerUser,
     loginUser,
-    getSingleUser
+    getSingleUser,
+    editUser,
+    getAllUsers
 }
