@@ -8,22 +8,16 @@ const{ addEvent } = require('./event_controller')
 
 
 const addList = (req,res) => {
-    const list = new ToDo()
+    
+    let list = req.body
 
-    list.list_title = req.body.list_title
-    list.items = req.body.items
-    list.theme = req.body.theme
-
-    list.save()
+    User.findByIdAndUpdate(req.params.user_id, {$push: {todoLists: list}})
     .then((data) => {
-        User.findById(req.params.user_id, (err,users) => {
-
-            if(users) {
-                users.todoLists.push(list)
-                users.save()
-                res.status(201).json(data)            
-            }
-        })
+        if(data){
+            res.status(200).json(data)
+        } else {
+            res.status(404).json(`List not created`)
+        }
     }).catch((err) => {
         console.error(err)
         res.status(500).json("Unsucccesful")
@@ -56,18 +50,6 @@ const getSingle = (req,res) => {
     let listId = mongoose.Types.ObjectId(req.params.listId);
     let userId = mongoose.Types.ObjectId(req.params.userId);
 
-
-    // ToDo.findById({'_id': id})
-    // .then((data) => {
-    //     if(data){
-    //         res.status(200).json(data)
-    //     } else {
-    //         res.status(404).json('List doesnt exist')
-    //     }
-    // }).catch((err) => {
-    //     console.error(err)
-    //     res.status(500).json(err)
-    // })
     User.findOne({_id: userId}, {'todoLists': {$elemMatch: {'_id': listId}}})
     .then((data) => {
         if(data){
@@ -87,10 +69,6 @@ const editList = (req,res) => {
 
     let id = mongoose.Types.ObjectId(req.params.listId);
 
-    // ToDo.findByIdAndUpdate({'_id' : id}, {$set: {
-    //     'list_title': req.body.list_title,
-    //     'theme': req.body.theme
-    // }})
     User.findOneAndUpdate({'todoLists._id': id}, {$set: {
         'todoLists.$.list_title': req.body.list_title,
         'todoLists.$.theme': req.body.theme
@@ -168,9 +146,6 @@ const addItem = (req,res) => {
     var userId = req.params.user_id
     var listId = req.params.listId
 
-    // ToDo.findByIdAndUpdate({'_id': listId}, {$push: {
-    //     'items' : item
-    // }})
     User.findOneAndUpdate(
         {_id: userId, "todoLists._id" : listId }, 
         { $push: {'todoLists.$.items': item} })

@@ -153,25 +153,27 @@ const todoListsSchema = new Schema({
 },{
     timestamps: true
 })
+var mongoose = require('mongoose')
 
 const userSchema = new Schema({
     name: {
         type: String,
         trim: true,
-        required: [true, 'Name is required']
+        required: [true, 'Name is required'],
+        minLength: [3, "Name must be at least 3 characters"],
+
     },
     email: {
         type: String,
-        unique: true,
         lowercase:true,
         trim:true,
         validate:[validator.isEmail, 'Invalid email'],
-        required: [true, 'Email is required']
+        required: [true, 'Email is required'],
+        dropDups: true,
+        unique: true,
     },
     password: {
         type: String,
-        // unique: true,
-        // trim: true,
         minLength: [8, "Password must be at least 8 characters"],
         required: [true, "Password is required"]
     },
