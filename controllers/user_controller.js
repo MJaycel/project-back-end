@@ -51,9 +51,7 @@ const registerUser = (req, res) => {
                 message: err
             })
         } else {
-            // user.password = undefined
             //create token
-            
             res.json({
                 token: jwt.sign({
                     name: user.name,

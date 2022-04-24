@@ -101,13 +101,11 @@ const deleteList = (req,res) => {
             { $pull : { todoLists: {_id: id}}}
         )
     .then((data) => {
-        ToDo.findByIdAndRemove({'_id': id}, (err) => {
-            if(err){
-                res.status(404).json('List Not Deleted')
-            } else{
-                res.status(200).json(data)
-            }
-        })
+        if(data){
+            res.status(200).json(data)
+        } else {
+            res.status(404).json(`List not deleted`)
+        }
     })        
     .catch((err) => {
         console.error(err)
@@ -125,7 +123,6 @@ const archiveList = (req,res) => {
         'todoLists.$.archived': req.body.archived,
     }})
     .then((data) => {
-
         if(data){
             res.status(200).json(data)
         } else {
@@ -194,23 +191,6 @@ const editItem = (req,res) => {
         }
     )
     .then((data) => {
-        // ToDo.findByIdAndUpdate(
-        //     {_id: listId},
-        //     {$set: {
-        //         'items.title' : req.body.title,
-        //         'items.description' : req.body.description,
-        //         'items.startDate' : req.body.startDate,
-        //         'items.endDate': req.body.endDate,
-        //         'items.startTime' : req.body.startTime,
-        //         'items.endTime' : req.body.endTime,
-        //         'items.isComplete' : req.body.isComplete,
-        //         'items.priorityLevel' : req.body.priorityLevel,
-        //         'items.progress' : req.body.progress
-        //     }}
-        // )
-        // if(req.body.inCalendar === true){
-        //     addInCal(data)
-        // }
         if(data){
             res.status(200).json(data)
         }else{

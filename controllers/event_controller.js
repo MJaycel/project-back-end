@@ -49,7 +49,6 @@ const getEvent = (req,res) => {
 
     let eventId = mongoose.Types.ObjectId(req.params.eventId);
     let userId = mongoose.Types.ObjectId(req.params.userId);
-    // let itemId = mongoose.Types.ObjectId(req.params.itemId);
 
     User.aggregate([
         { $match: {_id: userId}},
@@ -75,23 +74,6 @@ const editEvent = (req,res) => {
 
     let id = mongoose.Types.ObjectId(req.params.eventId);
 
-
-    // Event.findByIdAndUpdate({'_id' : id}, {$set: {
-    //     'title': req.body.title,
-    //     'description': req.body.description,
-    //     'startDate': req.body.startDate,
-    //     'endDate': req.body.endDate,
-    //     'startTime' : req.body.startTime,
-    //     'endTime': req.body.endTime,
-    //     'isComplete': req.body.isComplete,
-    //     'classes': req.body.classes,
-    //     'item_id' : req.body.item_id,
-    //     'repeat' : req.body.repeat,
-    //     'recurrence_pattern': req.body.recurrence_pattern,
-    //     'recurring_id' : req.body.recurring_id,
-    //     'isAllDay' : req.body.isAllDay,
-
-    // }})
     User.findOneAndUpdate({'events._id': id}, 
     {$set: {
         'events.$.title': req.body.title,
@@ -108,8 +90,6 @@ const editEvent = (req,res) => {
         'events.$.recurring_id' : req.body.recurring_id,
         'events.$.isAllDay' : req.body.isAllDay,
         'events.$.occurs_until' : req.body.occurs_until
-
-        
         }
     })
     .then((data) => {
@@ -121,12 +101,7 @@ const editEvent = (req,res) => {
     })
 }
 
-
-////// Weekly Event
-
-
 /////// Delete Event
-
 const deleteEvent = (req,res) => {
 
     var mongoose = require('mongoose') 
@@ -156,9 +131,6 @@ const deleteManyEvent = (req,res) => {
     var mongoose = require('mongoose') 
 
     let userId = mongoose.Types.ObjectId(req.params.user_id);
-
-    // let id = mongoose.Types.ObjectId(req.params.eventId);
-
     let rId = req.params.rId;
 
     User.updateMany(
@@ -183,8 +155,6 @@ const deleteManyEvent = (req,res) => {
 const UpdateManyEvent = (req,res) => {
     var mongoose = require('mongoose') 
 
-    // let userId = mongoose.Types.ObjectId(req.params.user_id);
-
     let rId = req.params.rId;
 
     User.updateMany({}, {$set: {
@@ -204,8 +174,6 @@ const UpdateManyEvent = (req,res) => {
         'events.$[i].occurs_until' : req.body.occurs_until
     }},{
         arrayFilters: [{"i.recurring_id": rId}],
-
-    
         multi: true
     }
     )
