@@ -13,13 +13,6 @@ const audiosSchema = new Schema({
     },
     category:{
         type: String
-        // id: {
-        //     type: Schema.Types.ObjectId,
-        //     // ref: "category"
-        // },
-        // cat_name: {
-        //     type: String
-        // }
     },
     cover_image: {
         type: String

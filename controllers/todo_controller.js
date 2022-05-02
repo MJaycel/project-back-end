@@ -1,17 +1,12 @@
 const { Mongoose } = require('mongoose')
 
 const User = require('../models/user_schema')
-const ToDo = require('../models/todo_schema')
-const { where } = require('../models/user_schema')
-const Event = require('../models/event_schema')
-const{ addEvent } = require('./event_controller')
-
 
 const addList = (req,res) => {
     
     let list = req.body
 
-    User.findByIdAndUpdate(req.params.user_id, {$push: {todoLists: list}})
+    User.findByIdAndUpdate(req.params.userId, {$push: {todoLists: list}})
     .then((data) => {
         if(data){
             res.status(200).json(data)
@@ -30,7 +25,7 @@ const addList = (req,res) => {
 ////// Get All Events
 const getAllToDo = (req,res) => {
 
-    User.findById(req.params.user_id)
+    User.findById(req.params.userId)
     .then((data) => {
         if(data){
             res.status(200).json(data.todoLists)
@@ -92,7 +87,7 @@ const editList = (req,res) => {
 const deleteList = (req,res) => {
     var mongoose = require('mongoose') 
 
-    let userId = mongoose.Types.ObjectId(req.params.user_id);
+    let userId = mongoose.Types.ObjectId(req.params.userId);
 
     let id = mongoose.Types.ObjectId(req.params.listId);
 
@@ -140,7 +135,7 @@ const addItem = (req,res) => {
 
     let item = req.body
 
-    var userId = req.params.user_id
+    var userId = req.params.userId
     var listId = req.params.listId
 
     User.findOneAndUpdate(
@@ -162,7 +157,7 @@ const addItem = (req,res) => {
 const editItem = (req,res) => {
     var mongoose = require('mongoose')
 
-    var userId = mongoose.Types.ObjectId(req.params.user_id)
+    var userId = mongoose.Types.ObjectId(req.params.userId)
     var listId = mongoose.Types.ObjectId(req.params.listId)
     var itemId = mongoose.Types.ObjectId(req.params.itemId)
 
@@ -255,7 +250,7 @@ const deleteItem = (req,res) => {
 const archiveItem = (req,res) => {
     var mongoose = require('mongoose')
 
-    var userId = mongoose.Types.ObjectId(req.params.user_id)
+    var userId = mongoose.Types.ObjectId(req.params.userId)
     var listId = mongoose.Types.ObjectId(req.params.listId)
     var itemId = mongoose.Types.ObjectId(req.params.itemId)
 
@@ -287,7 +282,7 @@ const archiveItem = (req,res) => {
 const addSubTask = (req,res) => {
     let subTask = req.body
 
-    var userId = req.params.user_id
+    var userId = req.params.userId
     var listId = req.params.listId
     var itemId = req.params.itemId
 
@@ -320,7 +315,7 @@ const addSubTask = (req,res) => {
 const editSubTask = (req,res) => {
     var mongoose = require('mongoose')
 
-    var userId = mongoose.Types.ObjectId(req.params.user_id)
+    var userId = mongoose.Types.ObjectId(req.params.userId)
     var listId = mongoose.Types.ObjectId(req.params.listId)
     var itemId = mongoose.Types.ObjectId(req.params.itemId)
     var subTaskId = mongoose.Types.ObjectId(req.params.subTaskId)

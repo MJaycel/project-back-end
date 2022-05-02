@@ -56,33 +56,33 @@ app.get('/users',getAllUsers)
 
 /////// EVENT ROUTES ////////
 app.post('/calendar/add/event/:userId', addEvent)
-app.get('/calendar/:user_id', getAllEvents)
+app.get('/calendar/:userId', getAllEvents)
 // app.get('/calendar/event/:eventId', getEvent)
 app.get('/calendar/user/:userId/event/:eventId', getEvent)
 
 app.post('/calendar/edit/event/:eventId', editEvent)
-app.delete('/calendar/delete/user/:user_id/event/:eventId', deleteEvent)
-app.delete('/calendar/delete/many/user/:user_id/event/:rId', deleteManyEvent)
+app.delete('/calendar/delete/user/:userId/event/:eventId', deleteEvent)
+app.delete('/calendar/delete/many/user/:userId/event/:rId', deleteManyEvent)
 app.post('/calendar/edit/many/event/:rId', UpdateManyEvent)
 
 
 
-app.post('/todo/add/list/:user_id', addList) 
-app.get('/todo/:user_id', getAllToDo) 
+app.post('/todo/add/list/:userId', addList) 
+app.get('/todo/:userId', getAllToDo) 
 // app.get('/todo/list/:listId', getSingle)
 app.get('/todo/user/:userId/list/:listId', getSingle)
 
 app.post('/todo/edit/list/:listId', editList)
-app.delete('/todo/delete/user/:user_id/list/:listId', deleteList)
+app.delete('/todo/delete/user/:userId/list/:listId', deleteList)
 app.post('/todo/archive/list/:listId', archiveList)
 
-app.post('/todo/add/user/:user_id/list/:listId', addItem) 
-app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId', editItem) 
+app.post('/todo/add/user/:userId/list/:listId', addItem) 
+app.post('/todo/edit/user/:userId/list/:listId/item/:itemId', editItem) 
 app.get('/todo/user/:userId/list/:listId/item/:itemId', getSingleItem)
 app.delete('/todo/delete/user/:userId/list/:listId/item/:itemId', deleteItem)
-app.post('/todo/archive/user/:user_id/list/:listId/item/:itemId', archiveItem) 
-app.post('/todo/add/user/:user_id/list/:listId/item/:itemId', addSubTask)
-app.post('/todo/edit/user/:user_id/list/:listId/item/:itemId/subTask/:subTaskId', editSubTask) 
+app.post('/todo/archive/user/:userId/list/:listId/item/:itemId', archiveItem) 
+app.post('/todo/add/user/:userId/list/:listId/item/:itemId', addSubTask)
+app.post('/todo/edit/user/:userId/list/:listId/item/:itemId/subTask/:subTaskId', editSubTask) 
 app.delete('/todo/delete/user/:userId/list/:listId/item/:itemId/subTask/:subTaskId', deleteSubTask)
 
 

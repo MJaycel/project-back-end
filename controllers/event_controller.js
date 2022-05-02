@@ -1,7 +1,6 @@
 const { Mongoose } = require('mongoose')
 
 const User = require('../models/user_schema')
-const Event = require('../models/event_schema')
 
 ////// Add Event
 const addEvent = (req,res) => {
@@ -28,7 +27,7 @@ const addEvent = (req,res) => {
 ////// Get All Events
 const getAllEvents = (req,res) => {
 
-    User.findById(req.params.user_id)
+    User.findById(req.params.userId)
     .then((data) => {
         if(data){
             res.status(200).json(data.events)
@@ -106,7 +105,7 @@ const deleteEvent = (req,res) => {
 
     var mongoose = require('mongoose') 
 
-    let userId = mongoose.Types.ObjectId(req.params.user_id);
+    let userId = mongoose.Types.ObjectId(req.params.userId);
 
     let id = mongoose.Types.ObjectId(req.params.eventId);
 
@@ -130,7 +129,7 @@ const deleteEvent = (req,res) => {
 const deleteManyEvent = (req,res) => {
     var mongoose = require('mongoose') 
 
-    let userId = mongoose.Types.ObjectId(req.params.user_id);
+    let userId = mongoose.Types.ObjectId(req.params.userId);
     let rId = req.params.rId;
 
     User.updateMany(

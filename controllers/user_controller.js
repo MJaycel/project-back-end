@@ -3,33 +3,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const User = require('../models/user_schema')
-const ToDo = require('../models/todo_schema')
-
-
-const addList = (req,res) => {
-    const list = new ToDo()
-
-    list.list_title = "My tasks"
-    list.theme = "green"
-
-    list.save()
-    .then((data) => {
-        User.findById(user._id, (err,users) => {
-
-            if(users) {
-                users.todoLists.push(list)
-                users.save()
-                res.status(201).json(data)            
-            }
-        })
-    }).catch((err) => {
-        console.error(err)
-        res.status(500).json("Unsucccesful")
-    })
-
-//     // REFFERENCE
-//     // https://stackoverflow.com/questions/34985846/mongoose-document-references-with-a-one-to-many-relationship
-}
 
 //// Register User  
 const registerUser = (req, res) => {
