@@ -4,7 +4,7 @@
   "description": "This is the back-end for Professional Project",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mary Jaycel Benedicto",
@@ -17,6 +17,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.1",
     "node": "^17.7.2",
+    "nodemon": "^2.0.16",
     "validator": "^13.7.0"
   }
 }
